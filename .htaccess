@@ -1,0 +1,52 @@
+RewriteEngine On
+
+# IMPORTANT: Adjust RewriteBase if your site is in a subdirectory
+# If dipug.com points to public_html/ (root), use: RewriteBase /
+# If dipug.com points to public_html/dipug/, then use: RewriteBase /dipug/
+# Ensure this matches your BASE_URL constant in PHP.
+RewriteBase /
+
+# Deny direct browsing of these sensitive directories
+RewriteRule ^includes/ - [F,L]
+RewriteRule ^config/ - [F,L]
+RewriteRule ^libs/ - [F,L]
+RewriteRule ^\.htaccess$ - [F,L]
+# We DO NOT forbid admin/actions/ or admin/auth/ here, as forms POST to them.
+# Security for those scripts is handled by PHP (session checks, CSRF).
+
+# Rule 1: Allow existing files and directories to be accessed directly
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# --- Specific Admin Routes ---
+# Allow direct access to admin's index.php for admin panel entry
+RewriteRule ^admin/?$ admin/index.php [L,QSA]
+RewriteRule ^admin/index\.php$ admin/index.php [L,QSA] 
+# Note: Action scripts in admin/actions/ will be accessed directly by forms,
+# so they don't need specific rewrite rules here if the general PHP execution is allowed.
+
+# --- Blog Specific Routes (Order is important) ---
+RewriteRule ^blog/category/([a-zA-Z0-9-]+)/page/([0-9]+)/?$ index.php?page=blog&category=$1&paged=$2 [L,QSA]
+RewriteRule ^blog/category/([a-zA-Z0-9-]+)/?$ index.php?page=blog&category=$1 [L,QSA]
+RewriteRule ^blog/page/([0-9]+)/?$ index.php?page=blog&paged=$1 [L,QSA]
+RewriteRule ^blog/?$ index.php?page=blog [L,QSA]
+
+
+# --- Single Posts (must come AFTER blog specific routes) ---
+RewriteCond %{REQUEST_URI} !^/(admin|assets|css|js|includes|actions|config|libs|pages|blog)/ [NC]
+RewriteCond %{REQUEST_URI} !^/(about|contact|privacy|services_overview|software|courses|support|webDev|cloud|cybersecurity|portfolio)/?$ [NC]
+RewriteRule ^([a-zA-Z0-9-]+)/?$ index.php?page=post&slug=$1 [L,QSA]
+
+# --- General Top-Level Pages (e.g., /about, /contact) ---
+RewriteCond %{REQUEST_URI} !^/(admin|assets|css|js|includes|actions|config|libs|pages|blog)/ [NC]
+RewriteRule ^([a-zA-Z0-9_-]+)/?$ index.php?page=$1 [L,QSA]
+
+
+# --- Homepage (root) ---
+RewriteRule ^$ index.php?page=home [L,QSA]
+
+# --- Fallback to main index.php for any other non-file/non-directory requests ---
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php [L]
