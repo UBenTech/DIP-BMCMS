@@ -1,17 +1,21 @@
-<?php // admin/includes/footer.php ?>
-            </main> </div> </div> <script>
-        lucide.createIcons();
+<?php
+// admin/footer.php
+?>
+    </div> <!-- End of Main Content -->
+  </div> <!-- End of Flex Container -->
 
-        // Admin Sidebar Toggle for mobile
-        const adminSidebarToggle = document.getElementById('adminSidebarToggle');
-        const adminSidebar = document.getElementById('adminSidebar');
-        if (adminSidebarToggle && adminSidebar) {
-            adminSidebarToggle.addEventListener('click', () => {
-                adminSidebar.classList.toggle('-translate-x-full');
-                // Optional: Add overlay for mobile when sidebar is open
-            });
+  <!-- Initialize Lucide icons -->
+  <script>
+    if (typeof lucide !== 'undefined') {
+      lucide.createIcons();
+    } else {
+      window.addEventListener('load', () => {
+        if (typeof lucide !== 'undefined') {
+          lucide.createIcons();
         }
-    </script>
-    <script src="<?php echo BASE_URL; ?>js/admin_script.js"></script> 
+      });
+    }
+  </script>
+  <script src="<?= BASE_URL; ?>js/script.js"></script>
 </body>
 </html>

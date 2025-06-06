@@ -1,89 +1,132 @@
 <?php
-// admin/includes/header.php
+// admin/header.php
+session_start();
+if (!isset($_SESSION['admin_user_id'])) {
+    header("Location: ../index.php?page=admin&admin_page=login");
+    exit;
+}
+require_once __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/db.php';
 
-// $admin_page_title is set in admin/index.php
-// $admin_page (for TinyMCE condition) is also set in admin/index.php
-$current_admin_page_for_header = $admin_page ?? ($_GET['admin_page'] ?? 'dashboard');
-
-
-// Ensure BASE_URL and SITE_NAME are available (should be defined in admin/index.php after loading settings)
-defined('BASE_URL') or define('BASE_URL', '/'); 
-defined('SITE_NAME') or define('SITE_NAME', 'dipug.com'); 
-
-$admin_base_url = BASE_URL . 'admin/';
-
+// Fetch the logged‐in admin’s name (optional, adjust to your user table structure)
+$admin_name = "Administrator";
+$user_id    = $_SESSION['admin_user_id'];
+$stmt       = $conn->prepare("SELECT name FROM users WHERE id = ? LIMIT 1");
+if ($stmt) {
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    if ($res && $res->num_rows === 1) {
+        $row        = $res->fetch_assoc();
+        $admin_name = $row['name'];
+    }
+    $stmt->close();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo esc_html($admin_page_title); ?> | <?php echo esc_html(SITE_NAME); ?> Admin</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                     colors: {
-                        'admin-primary': '#4338ca', // Indigo-700
-                        'admin-secondary': '#059669', // Emerald-600
-                        'admin-bg': '#f3f4f6',       // Gray-100 (light background for admin)
-                        'admin-text': '#1f2937',     // Gray-800
-                        'admin-sidebar-bg': '#1f2937', // Gray-800
-                        'admin-sidebar-text': '#d1d5db', // Gray-300
-                        'admin-sidebar-hover': '#374151', // Gray-700
-                        'admin-sidebar-active': '#4f46e5', // Indigo-600 (matching primary a bit more)
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', '"Noto Sans"', 'sans-serif'],
-                        display: ['Poppins', 'sans-serif'], 
-                    }
-                }
-            }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin · <?= esc_html(SITE_NAME); ?></title>
+  <!-- Tailwind + plugins for Admin -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <script>
+    tailwind.config = {
+      darkMode: false,
+      theme: {
+        extend: {
+          colors: {
+            primary: { DEFAULT: '#6366f1', hover: '#4f46e5' },
+            secondary: { DEFAULT: '#10b981', hover: '#059669' },
+            accent: { DEFAULT: '#f59e0b', hover: '#d97706' },
+            neutral: '#1e293b',
+            'neutral-light': '#334155',
+            'neutral-lighter': '#475569',
+            'base-100': '#FFFFFF',
+            'base-200': '#F4F4F4',
+            'base-300': '#E5E7EB',
+            info: '#22d3ee',
+            success: '#34d399',
+            warning: '#fbbf24',
+            error: '#f87171',
+          },
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', '"Noto Sans"', 'sans-serif'],
+            display: ['Poppins', 'sans-serif'],
+          }
         }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/lucide-static@latest/dist/lucide.min.js"></script>
-    
-    <?php if ($current_admin_page_for_header === 'add_post' || $current_admin_page_for_header === 'edit_post'): ?>
-    <script src="https://cdn.tiny.cloud/1/8p9b08ie4vj71jyp1rcn5fubk9tukzougnjrla69sgyox9z0/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
-    <?php endif; ?>
-
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>css/admin_style.css"> 
-    <link rel="icon" href="<?php echo BASE_URL; ?>assets/favicon.ico" type="image/x-icon">
-
-    <style>
-        /* Minimal essential styles if admin_style.css is not comprehensive */
-        .admin-content { transition: margin-left 0.3s ease-in-out; }
-        /* Sidebar toggle classes would be handled by JS if implementing dynamic collapse for desktop */
-        .tox-tinymce { border-radius: 0.375rem; border-width: 1px; border-color: #D1D5DB; } /* Tailwind gray-300 */
-    </style>
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="bg-admin-bg text-admin-text font-sans">
-    <div class="flex h-screen overflow-hidden"> 
-        <?php include_once 'sidebar.php'; // Include the sidebar ?>
-        
-        <div class="flex-1 flex flex-col overflow-hidden"> 
-            <header class="bg-white shadow-md p-4 flex justify-between items-center border-b print:hidden flex-shrink-0">
-                <div class="flex items-center">
-                    <button id="adminSidebarToggle" class="p-2 rounded-md text-gray-500 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-admin-primary md:hidden mr-2">
-                        <i data-lucide="menu" class="w-6 h-6"></i>
-                    </button>
-                    <h1 class="text-xl font-semibold text-gray-700"><?php echo esc_html($admin_page_title); ?></h1>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-600 hidden sm:inline">
-                        Welcome, <?php echo isset($_SESSION['admin_full_name']) && !empty($_SESSION['admin_full_name']) ? esc_html($_SESSION['admin_full_name']) : (isset($_SESSION['admin_username']) ? esc_html($_SESSION['admin_username']) : 'Admin'); ?>!
-                    </span>
-                    <a href="<?php echo BASE_URL; ?>" target="_blank" title="View Live Site" class="text-sm text-admin-secondary hover:underline flex items-center">
-                        <i data-lucide="external-link" class="w-4 h-4 mr-1"></i>View Site
-                    </a>
-                    <a href="<?php echo $admin_base_url; ?>index.php?admin_page=logout" class="text-sm text-red-600 hover:text-red-800 flex items-center bg-red-100 hover:bg-red-200 px-3 py-1.5 rounded-md transition-colors">
-                        <i data-lucide="log-out" class="w-4 h-4 mr-1.5"></i>Logout
-                    </a>
-                </div>
-            </header>
+<body class="bg-base-200 text-text antialiased flex h-screen overflow-hidden">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-neutral text-base-100 flex-shrink-0">
+    <div class="p-6">
+      <a href="<?= BASE_URL; ?>" class="flex items-center space-x-2">
+        <i data-lucide="cpu" class="w-6 h-6 text-secondary"></i>
+        <span class="font-display text-xl font-bold">DIPUG Admin</span>
+      </a>
+    </div>
+    <nav class="px-4 space-y-2">
+      <a href="index.php" class="block px-4 py-2 rounded-md hover:bg-neutral-lighter <?= ($admin_page ?? '') === 'dashboard' ? 'bg-neutral-light text-text font-semibold' : '' ?>">
+        <i data-lucide="home" class="w-5 h-5 inline-block mr-2"></i> Dashboard
+      </a>
+      <a href="posts.php" class="block px-4 py-2 rounded-md hover:bg-neutral-lighter <?= strpos($_SERVER['REQUEST_URI'], 'posts.php') !== false ? 'bg-neutral-light text-text font-semibold' : '' ?>">
+        <i data-lucide="file-text" class="w-5 h-5 inline-block mr-2"></i> Posts
+      </a>
+      <a href="categories.php" class="block px-4 py-2 rounded-md hover:bg-neutral-lighter <?= strpos($_SERVER['REQUEST_URI'], 'categories.php') !== false ? 'bg-neutral-light text-text font-semibold' : '' ?>">
+        <i data-lucide="layers" class="w-5 h-5 inline-block mr-2"></i> Categories
+      </a>
+      <a href="comments.php" class="block px-4 py-2 rounded-md hover:bg-neutral-lighter <?= strpos($_SERVER['REQUEST_URI'], 'comments.php') !== false ? 'bg-neutral-light text-text font-semibold' : '' ?>">
+        <i data-lucide="message-circle" class="w-5 h-5 inline-block mr-2"></i> Comments
+      </a>
+      <a href="users.php" class="block px-4 py-2 rounded-md hover:bg-neutral-lighter <?= strpos($_SERVER['REQUEST_URI'], 'users.php') !== false ? 'bg-neutral-light text-text font-semibold' : '' ?>">
+        <i data-lucide="users" class="w-5 h-5 inline-block mr-2"></i> Users
+      </a>
+      <a href="site_settings.php" class="block px-4 py-2 rounded-md hover:bg-neutral-lighter <?= strpos($_SERVER['REQUEST_URI'], 'site_settings.php') !== false ? 'bg-neutral-light text-text font-semibold' : '' ?>">
+        <i data-lucide="settings" class="w-5 h-5 inline-block mr-2"></i> Site Settings
+      </a>
+    </nav>
+    <div class="absolute bottom-0 w-full px-6 py-4 border-t border-neutral-lighter/50">
+      <p class="text-sm text-text/70">Logged in as:</p>
+      <p class="font-medium text-text mt-1"><?= esc_html($admin_name); ?></p>
+    </div>
+  </aside>
 
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-admin-bg p-4 sm:p-6">
-                
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col overflow-y-auto">
+    <!-- Topbar -->
+    <header class="flex items-center justify-between bg-base-100 px-6 py-4 border-b border-neutral-lighter/50">
+      <h2 class="text-2xl font-display font-semibold text-text">Manage Posts</h2>
+      <div class="flex space-x-3">
+        <a href="<?= BASE_URL; ?>" target="_blank" class="text-sm font-medium text-secondary hover:text-secondary-hover transition-colors">
+          View Site
+        </a>
+        <form action="logout.php" method="POST">
+          <?= generate_csrf_input(); ?>
+          <button type="submit" class="inline-flex items-center space-x-1 px-4 py-2 bg-error hover:bg-error-hover text-white rounded-md shadow-sm transition-colors text-sm">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+            <span>Logout</span>
+          </button>
+        </form>
+      </div>
+    </header>
+
+    <!-- Flash Messages -->
+    <div class="px-6 py-4">
+      <?php if (!empty($_SESSION['flash_success'])): ?>
+        <div class="mb-4 px-4 py-3 bg-success/20 border border-success text-success rounded-md">
+          <?= esc_html($_SESSION['flash_success']); ?>
+        </div>
+        <?php unset($_SESSION['flash_success']); ?>
+      <?php endif; ?>
+      <?php if (!empty($_SESSION['flash_error'])): ?>
+        <div class="mb-4 px-4 py-3 bg-error/10 border border-error text-error rounded-md">
+          <?= esc_html($_SESSION['flash_error']); ?>
+        </div>
+        <?php unset($_SESSION['flash_error']); ?>
+      <?php endif; ?>
+    </div>
