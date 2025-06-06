@@ -1,9 +1,9 @@
 <?php
 // pages/post.php
-global $conn; 
-global $page_title; 
-global $meta_description; 
-global $meta_keywords; 
+global $conn;
+global $page_title;
+global $meta_description;
+global $meta_keywords;
 global $site_settings;
 
 $post_data = null;
@@ -11,26 +11,26 @@ $is_preview = false;
 $base_blog_url_for_return = rtrim(BASE_URL, '/') . '/blog';
 
 
-if (isset($_GET['preview_id']) && isset($_GET['token']) && isset($_SESSION['admin_user_id'])) { 
+if (isset($_GET['preview_id']) && isset($_GET['token']) && isset($_SESSION['admin_user_id'])) {
     $preview_post_id = (int)$_GET['preview_id'];
     $preview_token = $_GET['token'];
     if (validate_preview_token($preview_post_id, $preview_token)) {
         $is_preview = true;
-        $sql = "SELECT posts.*, categories.name as category_name, categories.slug as category_slug 
-                FROM posts 
-                LEFT JOIN categories ON posts.category_id = categories.id 
-                WHERE posts.id = ? LIMIT 1"; 
+        $sql = "SELECT posts.*, categories.name as category_name, categories.slug as category_slug
+                FROM posts
+                LEFT JOIN categories ON posts.category_id = categories.id
+                WHERE posts.id = ? LIMIT 1";
         $stmt = $conn->prepare($sql);
         if ($stmt) $stmt->bind_param("i", $preview_post_id);
     } else {
-         $meta_description = "Invalid or expired preview link."; 
+         $meta_description = "Invalid or expired preview link.";
     }
 } else {
     $post_slug_or_id = isset($_GET['slug']) ? $_GET['slug'] : (isset($_GET['id']) ? $_GET['id'] : null);
     if ($post_slug_or_id) {
-        $sql = "SELECT posts.*, categories.name as category_name, categories.slug as category_slug 
-                FROM posts 
-                LEFT JOIN categories ON posts.category_id = categories.id 
+        $sql = "SELECT posts.*, categories.name as category_name, categories.slug as category_slug
+                FROM posts
+                LEFT JOIN categories ON posts.category_id = categories.id
                 WHERE posts.status = 'published' AND ";
 
         if (isset($_GET['slug'])) { // Slug is present due to .htaccess rewrite
@@ -45,14 +45,14 @@ if (isset($_GET['preview_id']) && isset($_GET['token']) && isset($_SESSION['admi
         }
     }
 }
-    
+
 if (isset($stmt) && $stmt) {
     if ($stmt->execute()) {
         $result = $stmt->get_result();
         if ($result && $result->num_rows > 0) {
             $post_data = $result->fetch_assoc();
-            $page_title = esc_html($post_data['title']) . ($is_preview ? " (Preview)" : "") . " - Blog | " . SITE_NAME; 
-            
+            $page_title = esc_html($post_data['title']) . ($is_preview ? " (Preview)" : "") . " - Blog | " . SITE_NAME;
+
             if (!empty($post_data['meta_description'])) {
                 $meta_description = esc_html($post_data['meta_description']);
             } elseif (!empty($post_data['excerpt'])) {
@@ -66,12 +66,12 @@ if (isset($stmt) && $stmt) {
         error_log("Error executing single post statement: " . $stmt->error);
     }
     $stmt->close();
-} elseif (!isset($stmt) && !$is_preview && isset($post_slug_or_id)) { 
+} elseif (!isset($stmt) && !$is_preview && isset($post_slug_or_id)) {
      error_log("Error preparing statement for single post: " . $conn->error);
 }
 
 
-if (empty($meta_description) && !$post_data && isset($site_settings['site_tagline'])) { 
+if (empty($meta_description) && !$post_data && isset($site_settings['site_tagline'])) {
     $meta_description = esc_html($site_settings['site_tagline']);
 } elseif (empty($meta_description) && !$post_data) {
     $meta_description = "The requested content could not be found on " . SITE_NAME;
@@ -80,6 +80,13 @@ if (!isset($meta_keywords)) {
     $meta_keywords = '';
 }
 
+?>
+<?php
+// Add Canonical URL for SEO
+if ($post_data && !empty($post_data['slug'])) {
+    $canonical_url = rtrim(BASE_URL, '/') . '/' . esc_html($post_data['slug']);
+    echo '<link rel="canonical" href="' . $canonical_url . '" />' . "\n";
+}
 ?>
 
 <div class="bg-neutral-light/10 py-12 md:py-16 animate-fade-in-up">
@@ -95,7 +102,7 @@ if (!isset($meta_keywords)) {
         <?php if ($post_data): ?>
             <article class="max-w-3xl mx-auto bg-neutral p-6 sm:p-8 md:p-10 rounded-xl shadow-2xl">
                 <header class="mb-8 pb-6 border-b border-neutral-light/50">
-                    <?php if(!empty($post_data['category_name']) && !empty($post_data['category_slug'])): 
+                    <?php if(!empty($post_data['category_name']) && !empty($post_data['category_slug'])):
                         $category_pretty_url_post = rtrim(BASE_URL, '/') . '/blog/category/' . esc_html($post_data['category_slug']);
                     ?>
                     <a href="<?php echo $category_pretty_url_post; ?>" class="text-sm font-semibold uppercase tracking-wider text-secondary hover:text-teal-400 transition-colors"><?php echo esc_html($post_data['category_name']); ?></a>
@@ -115,8 +122,8 @@ if (!isset($meta_keywords)) {
                     </figure>
                 <?php endif; ?>
 
-                <div class="prose prose-lg prose-invert max-w-none 
-                            prose-headings:font-display prose-headings:text-slate-100 
+                <div class="prose prose-lg prose-invert max-w-none
+                            prose-headings:font-display prose-headings:text-slate-100
                             prose-p:text-slate-300 prose-p:leading-relaxed
                             prose-a:text-secondary prose-a:no-underline hover:prose-a:text-teal-400 hover:prose-a:underline
                             prose-strong:text-slate-100
@@ -134,12 +141,12 @@ if (!isset($meta_keywords)) {
                 <div class="mt-10 pt-6 border-t border-neutral-light/50">
                     <p class="text-sm text-slate-400 flex items-center">
                         <i data-lucide="tags" class="w-4 h-4 mr-2 text-secondary"></i>
-                        <span class="font-semibold mr-1">Keywords:</span> 
+                        <span class="font-semibold mr-1">Keywords:</span>
                         <span class="italic"><?php echo esc_html($post_data['meta_keywords']); ?></span>
                     </p>
                 </div>
                 <?php endif; ?>
-                
+
                 <div class="mt-12 pt-8 border-t border-neutral-light/50">
                     <h3 class="font-display text-2xl font-semibold text-slate-100 mb-6">Comments</h3>
                     <p class="text-slate-400 italic">Comments are currently disabled or not yet implemented for this post.</p>
