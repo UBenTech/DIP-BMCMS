@@ -165,6 +165,34 @@
     </div>
 </section>
 
+<section class="py-16 md:py-20 bg-neutral-light/30">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 md:mb-16">
+            <h2 class="font-display text-3xl sm:text-4xl font-bold text-slate-100 mb-3">Latest Insights</h2>
+            <p class="text-lg text-secondary max-w-2xl mx-auto">Our thoughts on tech, business, and digital growth.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+            <?php foreach ($recent_posts as $idx => $post): ?>
+            <a href="<?php echo BASE_URL; ?>index.php?page=blog&post=<?php echo $post['slug']; ?>" class="group bg-neutral rounded-xl shadow-lg overflow-hidden animate-fade-in-up" style="animation-delay: <?php echo $idx * 100; ?>ms">
+                <div class="overflow-hidden">
+                    <img src="<?php echo $post['image']; ?>" alt="<?php echo esc_html($post['title']); ?>" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-300" />
+                </div>
+                <div class="p-6">
+                    <span class="text-xs font-semibold uppercase tracking-wider text-secondary"><?php echo esc_html($post['category']); ?></span>
+                    <h3 class="font-display text-lg font-semibold text-white mt-1 group-hover:text-secondary transition-colors"><?php echo esc_html($post['title']); ?></h3>
+                    <p class="mt-2 text-slate-300 text-sm"><?php echo esc_html($post['excerpt']); ?></p>
+                </div>
+            </a>
+            <?php endforeach; ?>
+        </div>
+        <div class="text-center mt-12 md:mt-16">
+            <a href="<?php echo BASE_URL; ?>index.php?page=blog" class="inline-flex items-center px-6 py-2.5 text-sm font-medium text-slate-100 bg-neutral-lighter hover:bg-secondary rounded-lg shadow transition-colors group">
+                <i data-lucide="book-open" class="w-4 h-4 mr-2"></i>Visit Our Blog <i data-lucide="arrow-right" class="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
 <section class="bg-gradient-to-r from-secondary via-teal-600 to-primary py-16 md:py-20 text-white">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">Ready to Start Your Digital Transformation?</h2>
