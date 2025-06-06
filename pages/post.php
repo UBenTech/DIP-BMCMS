@@ -19,7 +19,7 @@ if (isset($_GET['preview_id'], $_GET['token']) && isset($_SESSION['admin_user_id
             SELECT posts.*, categories.name AS category_name, categories.slug AS category_slug
             FROM posts
             LEFT JOIN categories ON posts.category_id = categories.id
-            WHERE posts.id = ? 
+            WHERE posts.id = ?
             LIMIT 1
         ";
         $stmt = $conn->prepare($sql);
@@ -36,7 +36,7 @@ if (isset($_GET['preview_id'], $_GET['token']) && isset($_SESSION['admin_user_id
             SELECT posts.*, categories.name AS category_name, categories.slug AS category_slug
             FROM posts
             LEFT JOIN categories ON posts.category_id = categories.id
-            WHERE posts.status = 'published' AND 
+            WHERE posts.status = 'published' AND
         ";
         if (isset($_GET['slug'])) {
             $sql .= "posts.slug = ? LIMIT 1";
@@ -60,8 +60,8 @@ if (!empty($stmt)) {
         $result = $stmt->get_result();
         if ($result && $result->num_rows > 0) {
             $post_data = $result->fetch_assoc();
-            $page_title = esc_html($post_data['title']) 
-                        . ($is_preview ? " (Preview)" : "") 
+            $page_title = esc_html($post_data['title'])
+                        . ($is_preview ? " (Preview)" : "")
                         . " - Blog | " . SITE_NAME;
 
             if (!empty($post_data['meta_description'])) {
@@ -71,8 +71,8 @@ if (!empty($stmt)) {
             } else {
                 $meta_description = esc_html(generate_excerpt($post_data['content'], 160, ''));
             }
-            $meta_keywords = !empty($post_data['meta_keywords']) 
-                           ? esc_html($post_data['meta_keywords']) 
+            $meta_keywords = !empty($post_data['meta_keywords'])
+                           ? esc_html($post_data['meta_keywords'])
                            : '';
         }
     }
@@ -98,8 +98,13 @@ if ($post_data && !empty($post_data['slug'])) {
 }
 ?>
 
-<section class="bg-background py-16 md:py-20 animate-fade-in-up">
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<!--
+  We removed the large top padding (py-16) so that the content starts
+  immediately below the header bar. The container is set to max-w-5xl (same
+  width as your blog listing), so everything lines up exactly.
+-->
+<section class="bg-background pb-16 animate-fade-in-up">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
     <?php if ($is_preview && $post_data): ?>
       <div class="mb-6 px-4 py-3 bg-highlight/10 border border-highlight text-highlight rounded-md text-sm text-center">
         <i data-lucide="alert-triangle" class="inline-block w-4 h-4 mr-1"></i>
@@ -111,12 +116,14 @@ if ($post_data && !empty($post_data['slug'])) {
     <?php endif; ?>
 
     <?php if ($post_data): ?>
-      <article class="max-w-3xl mx-auto bg-base-100 p-6 sm:p-8 md:p-10 rounded-xl shadow-2xl">
+      <article class="bg-base-100 p-6 sm:p-8 md:p-10 rounded-xl shadow-2xl">
         <header class="mb-8 pb-6 border-b border-base-200">
           <?php if (!empty($post_data['category_name']) && !empty($post_data['category_slug'])):
             $category_url = rtrim(BASE_URL, '/') . '/blog/category/' . esc_html($post_data['category_slug']);
           ?>
-            <a href="<?= $category_url; ?>" class="text-sm font-semibold uppercase tracking-wider text-secondary hover:text-highlight transition-colors">
+            <a href="<?= $category_url; ?>"
+               class="text-sm font-semibold uppercase tracking-wider text-secondary hover:text-highlight transition-colors"
+            >
               <?= esc_html($post_data['category_name']); ?>
             </a>
           <?php endif; ?>
@@ -125,13 +132,13 @@ if ($post_data && !empty($post_data['slug'])) {
           </h1>
           <div class="flex items-center text-text/70 text-sm space-x-4">
             <span>
-              <i data-lucide="calendar-days" class="inline-block w-4 h-4 mr-1 relative -top-px"></i>
-              Published on <?= esc_html(format_date($post_data['created_at'])); ?>
+              <i data-lucide="calendar-days" class="inline-block w-4 h-4 mr-1"></i>
+              <?= esc_html(format_date($post_data['created_at'])); ?>
             </span>
             <?php if (!empty($post_data['updated_at']) && format_date($post_data['updated_at']) !== format_date($post_data['created_at'])): ?>
               <span>
-                <i data-lucide="edit-3" class="inline-block w-4 h-4 mr-1 relative -top-px"></i>
-                Updated on <?= esc_html(format_date($post_data['updated_at'])); ?>
+                <i data-lucide="edit-3" class="inline-block w-4 h-4 mr-1"></i>
+                <?= esc_html(format_date($post_data['updated_at'])); ?>
               </span>
             <?php endif; ?>
           </div>
@@ -159,7 +166,8 @@ if ($post_data && !empty($post_data['slug'])) {
                  prose-pre:bg-base-200 prose-pre:text-text prose-pre:p-4 prose-pre:rounded-md prose-pre:overflow-x-auto
                  prose-ul:list-disc prose-ul:ml-5 prose-ol:list-decimal prose-ol:ml-5
                  prose-li:marker:text-secondary
-                 prose-img:rounded-lg prose-img:shadow-md">
+                 prose-img:rounded-lg prose-img:shadow-md"
+        >
           <?= $post_data['content']; ?>
         </div>
 
@@ -175,7 +183,9 @@ if ($post_data && !empty($post_data['slug'])) {
 
         <div class="mt-12 pt-8 border-t border-base-200">
           <h3 class="font-display text-2xl font-semibold text-text mb-6">Comments</h3>
-          <p class="text-text/70 italic">Comments are currently disabled or not yet implemented for this post.</p>
+          <p class="text-text/70 italic">
+            Comments are currently disabled or not yet implemented for this post.
+          </p>
         </div>
       </article>
 
