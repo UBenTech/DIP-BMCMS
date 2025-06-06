@@ -192,7 +192,7 @@ $main_nav_links = [
               <div class="group relative">
                 <a href="<?= $link_url; ?>"
                    aria-haspopup="true" aria-expanded="false"
-                   class="px-3 py-2 rounded-md text-sm font-medium <?= $is_active ? 'nav-link-active' : 'text-text/80 hover:bg-neutral-focus hover:text-secondary'; ?> transition-colors flex items-center space-x-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-base-100 focus:ring-secondary">
+                   class="px-3 py-2 rounded-md text-sm font-medium <?= $is_active ? 'nav-link-active' : 'text-text/80 hover:bg-neutral-focus hover:text-white'; ?> transition-colors flex items-center space-x-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-base-100 focus:ring-secondary">
                   <i data-lucide="<?= $link_item['icon']; ?>" class="w-4 h-4"></i>
                   <span><?= esc_html($link_item['name']); ?></span>
                   <i data-lucide="chevron-down" class="w-4 h-4 ml-1 group-hover:rotate-180 transition-transform"></i>
@@ -201,7 +201,7 @@ $main_nav_links = [
                   <div class="bg-neutral shadow-2xl rounded-b-lg border-t-2 border-secondary p-6 grid grid-cols-2 gap-x-6 gap-y-4">
                     <?php foreach ($services_menu_items_header as $s_item): ?>
                       <a href="<?= rtrim(BASE_URL, '/') . '/' . $s_item['page']; ?>"
-                         class="p-3 hover:bg-neutral-focus rounded-lg flex items-start space-x-3 transition-colors">
+                         class="p-3 rounded-lg flex items-start space-x-3 transition-colors bg-neutral hover:bg-neutral-focus hover:text-white">
                         <i data-lucide="<?= $s_item['icon']; ?>" class="w-6 h-6 text-secondary mt-1"></i>
                         <div>
                           <span class="font-semibold text-text hover:text-secondary block text-base"><?= esc_html($s_item['name']); ?></span>
@@ -214,7 +214,7 @@ $main_nav_links = [
               </div>
             <?php else: ?>
               <a href="<?= $link_url; ?>"
-                 class="px-3 py-2 rounded-md text-sm font-medium <?= $is_active ? 'nav-link-active' : 'text-text/80 hover:bg-neutral-focus hover:text-secondary'; ?> transition-colors flex items-center space-x-1">
+                 class="px-3 py-2 rounded-md text-sm font-medium <?= $is_active ? 'nav-link-active' : 'text-text/80 hover:bg-neutral-focus hover:text-white'; ?> transition-colors flex items-center space-x-1">
                 <i data-lucide="<?= $link_item['icon']; ?>" class="w-4 h-4"></i>
                 <span><?= esc_html($link_item['name']); ?></span>
               </a>
@@ -222,7 +222,7 @@ $main_nav_links = [
           <?php endforeach; ?>
 
           <?php if (isset($_SESSION['admin_user_id'])): ?>
-            <a href="<?= BASE_URL; ?>admin/" class="px-3 py-2 rounded-md text-sm font-medium text-text/80 hover:bg-neutral-focus hover:text-secondary transition-colors flex items-center space-x-1">
+            <a href="<?= BASE_URL; ?>admin/" class="px-3 py-2 rounded-md text-sm font-medium text-text/80 hover:bg-neutral-focus hover:text-white transition-colors flex items-center space-x-1">
               <i data-lucide="settings-2" class="w-4 h-4"></i>Admin Panel
             </a>
             <a href="<?= BASE_URL; ?>admin/index.php?admin_page=logout" class="ml-2 px-3 py-1.5 rounded-md text-sm font-medium bg-red-600 hover:bg-red-700 text-white transition-colors flex items-center space-x-1">
@@ -249,7 +249,7 @@ $main_nav_links = [
           <?php $link_url_mobile = rtrim(BASE_URL, '/') . '/' . $link_item['page']; ?>
           <?php $is_active_mobile = ($current_public_page === $link_item['page']); ?>
           <a href="<?= $link_url_mobile; ?>"
-             class="block px-3 py-3 rounded-md text-base font-medium <?= $is_active_mobile ? 'text-secondary bg-neutral-focus' : 'text-text/80 hover:bg-neutral-focus hover:text-secondary'; ?> transition-colors flex items-center space-x-2">
+             class="block px-3 py-3 rounded-md text-base font-medium <?= $is_active_mobile ? 'text-secondary bg-neutral-focus' : 'text-text/80 hover:bg-neutral-focus hover:text-white'; ?> transition-colors flex items-center space-x-2">
             <i data-lucide="<?= $link_item['icon']; ?>" class="w-5 h-5"></i>
             <span><?= esc_html($link_item['name']); ?></span>
           </a>
@@ -257,7 +257,7 @@ $main_nav_links = [
             <div class="pl-5 space-y-1 border-l-2 border-neutral-focus ml-2.5 mb-2">
               <?php foreach ($services_menu_items_header as $s_item): ?>
                 <a href="<?= rtrim(BASE_URL, '/') . '/' . $s_item['page']; ?>"
-                   class="block px-3 py-2 rounded-md text-sm font-medium text-text/80 hover:bg-neutral-focus hover:text-secondary transition-colors flex items-center space-x-2">
+                   class="block px-3 py-2 rounded-md text-sm font-medium text-text/80 hover:bg-neutral-focus hover:text-white transition-colors flex items-center space-x-2">
                   <i data-lucide="<?= $s_item['icon']; ?>" class="w-4 h-4"></i>
                   <span><?= esc_html($s_item['name']); ?></span>
                 </a>
@@ -269,14 +269,14 @@ $main_nav_links = [
         <div class="border-t border-neutral-lighter pt-4 mt-4 space-y-2">
           <?php if (isset($_SESSION['admin_user_id'])): ?>
             <a href="<?= BASE_URL; ?>admin/"
-               class="block px-3 py-3 rounded-md text-base font-medium text-text/80 hover:bg-neutral-focus hover:text-secondary transition-colors">Admin Dashboard</a>
+               class="block px-3 py-3 rounded-md text-base font-medium text-text/80 hover:bg-neutral-focus hover:text-white transition-colors">Admin Dashboard</a>
             <a href="<?= BASE_URL; ?>admin/index.php?admin_page=logout"
                class="block w-full text-left px-3 py-3 rounded-md text-base font-medium bg-red-600 hover:bg-red-700 text-white transition-colors">
               Sign Out
             </a>
           <?php else: ?>
             <a href="<?= BASE_URL; ?>admin/"
-               class="block px-3 py-3 rounded-md text-base font-medium text-text/80 hover:bg-neutral-focus hover:text-secondary transition-colors">Admin Login</a>
+               class="block px-3 py-3 rounded-md text-base font-medium text-text/80 hover:bg-neutral-focus hover:text-white transition-colors">Admin Login</a>
           <?php endif; ?>
         </div>
       </nav>
