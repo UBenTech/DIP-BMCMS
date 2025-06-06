@@ -48,39 +48,43 @@ $main_nav_links = [
     
     <script src="https://cdn.tailwindcss.com?plugins=typography,forms"></script> 
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                colors: {
-                    'primary': {
-                    DEFAULT: '#0056B3',
-                    hover: '#004a99',
-                    },
-                    'secondary': {
-                    DEFAULT: '#4B5563',
-                    hover: '#374151',
-                    },
-                    'accent': {
-                    DEFAULT: '#F59E0B',
-                    hover: '#d97706',
-                    },
-                    'neutral': '#F4F4F4',
-                    'neutral-content': '#333333',
-                    'neutral-focus': '#0056B3',
-                    'neutral-light': '#E5E7EB',
-                    'neutral-lighter': '#F4F4F4',
-                    'base-100': '#FFFFFF',
-                    'base-200': '#F4F4F4',
-                    'base-300': '#E5E7EB',
-                    'info': '#22d3ee',
-                    'success': '#34d399',
-                    'warning': '#f59e0b',
-                    'error': '#f87171',
-                },
-                },
-            },
-            };
+<script src="https://cdn.tailwindcss.com?plugins=typography,forms"></script>
+<script>
+  tailwind.config = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          'primary': {
+            DEFAULT: '#0056B3',
+            'hover': '#004a99',
+          },
+          'secondary': {
+            DEFAULT: '#4B5563',
+            'hover': '#374151',
+          },
+          'accent': {
+            DEFAULT: '#F59E0B',
+            'hover': '#d97706',
+          },
+          'neutral': '#F4F4F4',
+          'neutral-content': '#333333',
+          'neutral-focus': '#0056B3',
+          'neutral-light': '#E5E7EB',
+          'neutral-lighter': '#F4F4F4',
+          'base-100': '#FFFFFF',
+          'base-200': '#F4F4F4',
+          'base-300': '#E5E7EB',
+          'info': '#22d3ee',
+          'success': '#34d399',
+          'warning': '#F59E0B',
+          'error': '#f87171',
+        },
+      },
+    },
+  }
+</script>
+
                     fontFamily: {
                         sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', '"Noto Sans"', 'sans-serif'],
                         display: ['Poppins', 'sans-serif'], 
