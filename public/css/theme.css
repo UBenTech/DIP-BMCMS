@@ -1,0 +1,114 @@
+:root {
+  --primary-blue: #0056b3;
+  --background: #f4f4f4;
+  --container-bg: #fff;
+  --text-main: #333;
+  --code-accent: #d14;
+  --border-radius: 8px;
+  --box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  --danger: #d9534f;
+  --success: #28a745;
+  --warning: #ffc107;
+  --muted: #888;
+  --heading-weight: 700;
+}
+body {
+  background: var(--background);
+  color: var(--text-main);
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  background: var(--container-bg);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+h1, h2, h3, h4, h5, h6 {
+  color: var(--primary-blue);
+  font-weight: var(--heading-weight);
+}
+a {
+  color: var(--primary-blue);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  text-decoration: underline;
+  color: var(--danger);
+}
+button, .btn {
+  background: var(--primary-blue);
+  color: #fff;
+  border: none;
+  padding: 0.65em 1.25em;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: background 0.2s;
+}
+button:disabled, .btn:disabled {
+  background: var(--muted);
+  cursor: not-allowed;
+}
+button.danger, .btn.danger {
+  background: var(--danger);
+}
+button.success, .btn.success {
+  background: var(--success);
+}
+input, textarea, select {
+  width: 100%;
+  padding: 0.7em;
+  margin-bottom: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+}
+pre {
+  background: #eee;
+  border: 1px solid #ddd;
+  border-left: 5px solid var(--primary-blue);
+  padding: 1em;
+  margin-bottom: 1em;
+  overflow-x: auto;
+  font-size: 1em;
+  border-radius: 4px;
+}
+code {
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--code-accent);
+  white-space: pre-wrap;
+}
+.alert {
+  padding: 1em;
+  border-radius: 4px;
+  margin-bottom: 1em;
+}
+.alert.success {
+  background: #e8f5e9;
+  color: var(--success);
+}
+.alert.danger {
+  background: #fbe9e7;
+  color: var(--danger);
+}
+.alert.warning {
+  background: #fff3cd;
+  color: var(--warning);
+}
+.card {
+  background: var(--container-bg);
+  box-shadow: var(--box-shadow);
+  border-radius: var(--border-radius);
+  padding: 1.5em;
+  margin-bottom: 1em;
+}
+@media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+  }
+}
