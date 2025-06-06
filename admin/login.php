@@ -1,17 +1,27 @@
 <?php
 session_start();
 include '../includes/db.php';
-if($_SERVER['REQUEST_METHOD']==='POST'){
-  $u=$_POST['user']; $p=$_POST['pass'];
-  $res=mysqli_query($conn,"SELECT * FROM admins WHERE username='$u'");
-  if($r=mysqli_fetch_assoc($res)){
-    if(password_verify($p,$r['password'])){
-      $_SESSION['admin']=$u;
-      header('Location: index.php');
-      exit;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $u = mysqli_real_escape_string($conn, $_POST['user']);
+    $p = $_POST['pass'];
+
+    // Adjust this query to match how you flag admin users in your users table:
+    // Option A: you have an is_admin column
+    $sql = "SELECT * FROM users WHERE username='$u' AND is_admin=1 LIMIT 1";
+    // Option B: you use a role field
+    // $sql = "SELECT * FROM users WHERE username='$u' AND role='admin' LIMIT 1";
+
+    $res = mysqli_query($conn, $sql);
+
+    if ($res && $r = mysqli_fetch_assoc($res)) {
+        if (password_verify($p, $r['password'])) {
+            $_SESSION['admin'] = $u;
+            header('Location: index.php');
+            exit;
+        }
     }
-  }
-  $error="Invalid credentials";
+    $error = "Invalid credentials or not authorized.";
 }
 ?>
 <!DOCTYPE html>
@@ -29,7 +39,9 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 <body>
 <div class="box">
   <h2>Admin Login</h2>
-  <?php if(isset($error)):?><p class="error"><?=$error?></p><?php endif;?>
+  <?php if (isset($error)): ?>
+    <p class="error"><?= htmlspecialchars($error) ?></p>
+  <?php endif; ?>
   <form method="post">
     <input name="user" placeholder="Username" required>
     <input name="pass" type="password" placeholder="Password" required>
