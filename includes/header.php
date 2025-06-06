@@ -53,7 +53,7 @@ $main_nav_links = [
             theme: {
                 extend: {
                     colors: {
-                        'primary': { DEFAULT: '#6366f1', 'hover': '#4f46e5' }, 
+                        'primary': { DEFAULT: '#0056B3', 'hover': '#4f46e5' }, 
                         'secondary': { DEFAULT: '#10b981', 'hover': '#059669' }, 
                         'accent': { DEFAULT: '#f59e0b', 'hover': '#d97706' }, 
                         'neutral': '#1e293b', 
