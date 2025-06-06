@@ -24,7 +24,7 @@ unset($_SESSION['contact_form_data'], $_SESSION['contact_form_errors'], $_SESSIO
       <!-- Contact Form Card -->
       <div class="bg-base-100 p-6 sm:p-8 rounded-xl shadow-xl">
         <h3 class="font-display text-2xl font-semibold text-secondary mb-6">Send Us a Message</h3>
-        <form action="<?= BASE_URL; ?>includes/contact_process.php" method="POST" enctype="multipart/form-data" class="space-y-5" id="contactForm">
+        <form action="<?= BASE_URL; ?>in/contact_process.php" method="POST" enctype="multipart/form-data" class="space-y-5" id="contactForm">
           <?= generate_csrf_input(); ?>
 
           <!-- Inquiry Type -->
