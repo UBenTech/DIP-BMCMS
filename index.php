@@ -13,11 +13,10 @@ $site_settings = load_site_settings();
 // --- CONFIGURATION (Use loaded settings, fallback to defaults if needed) ---
 define('BASE_URL', '/'); 
 define('SITE_NAME', $site_settings['site_name'] ?? 'dipug.com');
-define('SITE_TAGLINE', $site_settings['site_tagline'] ?? 'Digital Innovation and Programing');
+define('SITE_TAGLINE', $site_settings['site_tagline'] ?? 'Digital Innovation and Programming');
 define('POSTS_PER_PAGE', (int)($site_settings['posts_per_page'] ?? 10));
 define('CONTACT_EMAIL', $site_settings['contact_email'] ?? 'info@example.com');
 define('FOOTER_COPYRIGHT', $site_settings['footer_copyright'] ?? '&copy; {year} dipug.com. All Rights Reserved.');
-
 
 define('DB_HOST', 'localhost');
 define('DB_USER', 'u662439561_main5_'); 
@@ -114,10 +113,11 @@ include_once 'includes/header.php';
 if (file_exists($include_file)) {
     include_once $include_file;
 } else {
-    echo "<div class='container mx-auto my-10 p-8 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center'>";
-    echo "<h1 class='text-2xl font-bold'>Error: Content File Missing</h1>";
-    echo "<p>The file '" . esc_html($include_file) . "' could not be found.</p>";
-    echo "</div>";
+    echo "
+    <div class='container mx-auto my-10 p-8 bg-red-100 border border-red-400 text-red-700 rounded-lg text-center'>
+      <h1 class='text-2xl font-bold'>Error: Content File Missing</h1>
+      <p>The file '" . esc_html($include_file) . "' could not be found.</p>
+    </div>";
 }
 
 include_once 'includes/footer.php';
