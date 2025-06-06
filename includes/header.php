@@ -7,7 +7,7 @@ $meta_keywords    = $meta_keywords ?? '';
 
 defined('BASE_URL') or define('BASE_URL', '/');
 if (!defined('SITE_NAME')) {
-    $site_settings_for_header_name = load_site_settings(); // Assumes load_site_settings() is available via functions.php
+    $site_settings_for_header_name = load_site_settings();
     define('SITE_NAME', $site_settings_for_header_name['site_name'] ?? 'dipug.com');
 }
 
@@ -15,12 +15,12 @@ global $page;
 $current_public_page = $page ?? ($_GET['page'] ?? 'home');
 
 $services_menu_items_header = [
-    ["name" => "Web Development",   "page" => "webDev", "icon" => "code-xml",       "desc" => "Modern websites & applications."],
-    ["name" => "Software Solutions","page" => "software", "icon" => "app-window",    "desc" => "Custom software for your needs."],
-    ["name" => "Online Courses",    "page" => "courses", "icon" => "graduation-cap", "desc" => "Upskill with expert-led courses."],
-    ["name" => "Tech Support",      "page" => "support", "icon" => "life-buoy",     "desc" => "Reliable IT assistance & consulting."],
-    ["name" => "Cloud Solutions",   "page" => "cloud",   "icon" => "cloud-cog",     "desc" => "Scalable cloud infrastructure."],
-    ["name" => "Cybersecurity",     "page" => "cybersecurity", "icon" => "shield-check","desc" => "Protect your digital assets."]
+    ["name" => "Web Development",   "page" => "webDev",         "icon" => "code-xml",       "desc" => "Modern websites & applications."],
+    ["name" => "Software Solutions","page" => "software",       "icon" => "app-window",    "desc" => "Custom software for your needs."],
+    ["name" => "Online Courses",    "page" => "courses",        "icon" => "graduation-cap", "desc" => "Upskill with expert-led courses."],
+    ["name" => "Tech Support",      "page" => "support",        "icon" => "life-buoy",     "desc" => "Reliable IT assistance & consulting."],
+    ["name" => "Cloud Solutions",   "page" => "cloud",          "icon" => "cloud-cog",     "desc" => "Scalable cloud infrastructure."],
+    ["name" => "Cybersecurity",     "page" => "cybersecurity",  "icon" => "shield-check",  "desc" => "Protect your valuable digital assets."]
 ];
 
 $main_nav_links = [
@@ -153,8 +153,8 @@ $main_nav_links = [
 </head>
 <body class="antialiased bg-background text-text flex flex-col min-h-screen">
 
-  <!-- Top Bar (Optional: Privacy / About links) -->
-  <div class="bg-neutral text-text/70 py-2 px-4 sm:px-6 lg:px-8 border-b border-neutral-light text-xs print:hidden">
+  <!-- Top Bar -->
+  <div class="bg-neutral text-neutral-content/70 py-2 px-4 sm:px-6 lg:px-8 border-b border-neutral-light text-xs print:hidden">
     <div class="container mx-auto flex justify-between items-center">
       <div class="flex space-x-4">
         <a href="<?= rtrim(BASE_URL, '/'); ?>/about"   class="hover:text-secondary transition-colors">About Us</a>
@@ -204,7 +204,7 @@ $main_nav_links = [
                          class="p-3 hover:bg-neutral-focus rounded-lg flex items-start space-x-3 transition-colors">
                         <i data-lucide="<?= $s_item['icon']; ?>" class="w-6 h-6 text-secondary mt-1"></i>
                         <div>
-                          <span class="font-semibold text-text group-hover:text-white block text-base"><?= esc_html($s_item['name']); ?></span>
+                          <span class="font-semibold text-text hover:text-secondary block text-base"><?= esc_html($s_item['name']); ?></span>
                           <span class="text-xs text-text/60 block"><?= esc_html($s_item['desc'] ?? ''); ?></span>
                         </div>
                       </a>
@@ -236,14 +236,14 @@ $main_nav_links = [
           <button id="mobileMenuButton" aria-label="Open Menu" aria-expanded="false" aria-controls="mobileMenu"
                   class="text-text/80 hover:text-secondary focus:outline-none p-2 rounded-md hover:bg-neutral-focus">
             <i id="mobileMenuIconOpen" data-lucide="menu" class="w-7 h-7 block"></i>
-            <i id="mobileMenuIconClose" data-lucide="x"    class="w-7 h-7 hidden"></i>
+            <i id="mobileMenuIconClose" data-lucide="x" class="w-7 h-7 hidden"></i>
           </button>
         </div>
       </div>
     </div>
 
     <!-- Mobile Menu Panel -->
-    <div id="mobileMenu" class="mobile-menu md:hidden bg-neutral border-t border-neutral-lighter/50 absolute w-full shadow-xl left-0">
+    <div id="mobileMenu" class="mobile-menu hidden bg-neutral border-t border-neutral-lighter/50 absolute w-full shadow-xl left-0">
       <nav class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
         <?php foreach ($main_nav_links as $link_item): ?>
           <?php $link_url_mobile = rtrim(BASE_URL, '/') . '/' . $link_item['page']; ?>
