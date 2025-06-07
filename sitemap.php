@@ -3,11 +3,11 @@
 header('Content-Type: application/xml; charset=UTF-8');
 
 // Include necessary files (adjust path if BASE_URL isn't set correctly in functions.php)
+require_once 'includes/config.php'; // NEW: Include global config
 require_once 'includes/functions.php'; // For BASE_URL, esc_html, and format_date
 require_once 'includes/db.php';     // For $conn database connection
 
-// Ensure BASE_URL is defined if it's not already from included files
-defined('BASE_URL') or define('BASE_URL', '/');
+// BASE_URL is now defined in config.php
 
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 ?>

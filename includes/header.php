@@ -1,15 +1,18 @@
 <?php
 // includes/header.php
+require_once __DIR__ . '/config.php'; // Ensure config is loaded first
 
-$page_title       = $page_title ?? (defined('SITE_NAME') ? SITE_NAME : 'dipug.com');
-$meta_description = $meta_description ?? 'Welcome to ' . (defined('SITE_NAME') ? SITE_NAME : 'dipug.com');
+// Use SITE_NAME and BASE_URL directly from config.php
+$page_title       = $page_title ?? SITE_NAME;
+$meta_description = $meta_description ?? 'Welcome to ' . SITE_NAME;
 $meta_keywords    = $meta_keywords ?? '';
 
-defined('BASE_URL') or define('BASE_URL', '/');
-if (!defined('SITE_NAME')) {
-    $site_settings_for_header_name = load_site_settings();
-    define('SITE_NAME', $site_settings_for_header_name['site_name'] ?? 'dipug.com');
-}
+// Removed redundant definitions for BASE_URL and SITE_NAME, now handled by config.php
+// defined('BASE_URL') or define('BASE_URL', '/');
+// if (!defined('SITE_NAME')) {
+//     $site_settings_for_header_name = load_site_settings();
+//     define('SITE_NAME', $site_settings_for_header_name['site_name'] ?? 'dipug.com');
+// }
 
 global $page;
 $current_public_page = $page ?? ($_GET['page'] ?? 'home');
@@ -42,7 +45,6 @@ $main_nav_links = [
       <meta name="keywords" content="<?= esc_html($meta_keywords); ?>">
     <?php endif; ?>
 
-    <!-- Tailwind CSS + custom color configuration -->
     <script src="https://cdn.tailwindcss.com?plugins=typography,forms"></script>
     <script>
       tailwind.config = {
@@ -153,7 +155,6 @@ $main_nav_links = [
 </head>
 <body class="antialiased bg-background text-text flex flex-col min-h-screen">
 
-  <!-- Top Bar -->
   <div class="bg-neutral text-neutral-content/70 py-2 px-4 sm:px-6 lg:px-8 border-b border-neutral-light text-xs print:hidden">
     <div class="container mx-auto flex justify-between items-center">
       <div class="flex space-x-4">
@@ -173,17 +174,14 @@ $main_nav_links = [
     </div>
   </div>
 
-  <!-- Main Navigation -->
   <header id="mainNav" class="bg-base-100/90 backdrop-blur-lg shadow sticky top-0 z-50 border-b border-neutral-light/50 print:hidden">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
-        <!-- Logo / Site Name -->
         <a href="<?= rtrim(BASE_URL, '/'); ?>/" class="flex items-center space-x-2 shrink-0">
           <i data-lucide="cpu" class="w-8 h-8 text-secondary"></i>
           <span class="font-display text-xl sm:text-2xl font-bold text-text hover:text-secondary transition-colors"><?= SITE_NAME; ?></span>
         </a>
 
-        <!-- Desktop Menu -->
         <nav class="hidden md:flex items-center space-x-6">
           <?php foreach ($main_nav_links as $link_item): ?>
             <?php $link_url = rtrim(BASE_URL, '/') . '/' . $link_item['page']; ?>
@@ -231,7 +229,6 @@ $main_nav_links = [
           <?php endif; ?>
         </nav>
 
-        <!-- Mobile Menu Button -->
         <div class="md:hidden flex items-center">
           <button id="mobileMenuButton" aria-label="Open Menu" aria-expanded="false" aria-controls="mobileMenu"
                   class="text-text/80 hover:text-secondary focus:outline-none p-2 rounded-md hover:bg-neutral-focus">
@@ -242,7 +239,6 @@ $main_nav_links = [
       </div>
     </div>
 
-    <!-- Mobile Menu Panel -->
     <div id="mobileMenu" class="mobile-menu hidden bg-neutral border-t border-neutral-lighter/50 absolute w-full shadow-xl left-0">
       <nav class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
         <?php foreach ($main_nav_links as $link_item): ?>

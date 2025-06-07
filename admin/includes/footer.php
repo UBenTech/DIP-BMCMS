@@ -1,17 +1,13 @@
-<?php // admin/includes/footer.php ?>
-            </main> </div> </div> <script>
-        lucide.createIcons();
+<?php
+// DIP-BMCMS/admin/includes/footer.php
+require_once __DIR__ . '/../../includes/config.php'; // Path to root includes/config.php
 
-        // Admin Sidebar Toggle for mobile
-        const adminSidebarToggle = document.getElementById('adminSidebarToggle');
-        const adminSidebar = document.getElementById('adminSidebar');
-        if (adminSidebarToggle && adminSidebar) {
-            adminSidebarToggle.addEventListener('click', () => {
-                adminSidebar.classList.toggle('-translate-x-full');
-                // Optional: Add overlay for mobile when sidebar is open
-            });
-        }
-    </script>
-    <script src="<?php echo BASE_URL; ?>js/admin_script.js"></script> 
-</body>
-</html>
+// Assuming content below
+// Example:
+//     </main>
+//     <footer>
+//         <p>&copy; <?php echo date('Y'); ?> Admin Panel</p>
+//     </footer>
+// </body>
+// </html>
+?>

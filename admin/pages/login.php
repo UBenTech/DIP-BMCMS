@@ -1,15 +1,18 @@
 <?php
 // admin/pages/login.php
-// This page will have its own full HTML structure, not using admin header/footer.
-defined('BASE_URL') or define('BASE_URL', '/');
-$admin_base_url = BASE_URL . 'admin/';
+session_start(); 
+require_once __DIR__ . '/../../includes/config.php'; // NEW: Include global config
+require_once __DIR__ . '/../../includes/functions.php'; // For esc_html
+
+$admin_base_url = BASE_URL . 'admin/'; // Re-derive admin_base_url
 
 $error_message = '';
 if (isset($_SESSION['login_error'])) {
     $error_message = $_SESSION['login_error'];
-    unset($_SESSION['login_error']); // Clear error after displaying
+    unset($_SESSION['login_error']);
 }
-$redirect_url = isset($_GET['redirect']) ? $_GET['redirect'] : ($admin_base_url . 'index.php?admin_page=dashboard');
+// Ensure redirect_url is also based on BASE_URL for safety
+$redirect_url = isset($_GET['redirect']) && (strpos($_GET['redirect'], BASE_URL) === 0 || substr($_GET['redirect'], 0, 1) === '/') ? $_GET['redirect'] : (BASE_URL . 'admin/pages/dashboard.php');
 
 ?>
 <!DOCTYPE html>
@@ -43,7 +46,7 @@ $redirect_url = isset($_GET['redirect']) ? $_GET['redirect'] : ($admin_base_url 
             </div>
         <?php endif; ?>
 
-        <form action="<?php echo $admin_base_url; ?>index.php?admin_page=login_process" method="POST" class="space-y-6">
+        <form action="<?php echo $admin_base_url; ?>auth/login_process.php" method="POST" class="space-y-6">
             <input type="hidden" name="redirect_url" value="<?php echo esc_html($redirect_url); ?>">
             <div>
                 <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username or Email</label>

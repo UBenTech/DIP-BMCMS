@@ -4,20 +4,18 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Using __DIR__ for more reliable path resolution
+require_once __DIR__ . '/../../includes/config.php'; // NEW: Include global config
 require_once __DIR__ . '/../../includes/db.php'; 
 require_once __DIR__ . '/../../includes/hash.php'; 
 require_once __DIR__ . '/../../includes/functions.php'; 
 
-defined('BASE_URL') or define('BASE_URL', '/');
-$admin_base_url = BASE_URL . 'admin/';
+$admin_base_url = BASE_URL . 'admin/'; // Use BASE_URL from config
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username_or_email = trim($_POST['username']);
     $password = trim($_POST['password']);
-    // Use a default redirect if not provided or invalid
     $redirect_url_from_form = isset($_POST['redirect_url']) ? $_POST['redirect_url'] : '';
-    $default_redirect = $admin_base_url . 'index.php?admin_page=dashboard';
+    $default_redirect = $admin_base_url . 'pages/dashboard.php'; // Redirect to dashboard file
     
     // Basic validation for the redirect URL to prevent open redirect vulnerabilities
     if (!empty($redirect_url_from_form) && (strpos($redirect_url_from_form, BASE_URL) === 0 || substr($redirect_url_from_form, 0, 1) === '/')) {
@@ -29,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($username_or_email) || empty($password)) {
         $_SESSION['login_error'] = "Username/Email and password are required.";
-        header('Location: ' . $admin_base_url . 'index.php?admin_page=login');
+        header('Location: ' . $admin_base_url . 'pages/login.php'); // Direct to login file
         exit;
     }
 
@@ -41,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$stmt) {
         error_log("Login process DB prepare error: " . $conn->error);
         $_SESSION['login_error'] = "Database error. Please try again later.";
-        header('Location: ' . $admin_base_url . 'index.php?admin_page=login');
+        header('Location: ' . $admin_base_url . 'pages/login.php'); // Direct to login file
         exit;
     }
 
@@ -72,17 +70,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         } else {
             $_SESSION['login_error'] = "Invalid username/email or password.";
-            header('Location: ' . $admin_base_url . 'index.php?admin_page=login');
+            header('Location: ' . $admin_base_url . 'pages/login.php'); // Direct to login file
             exit;
         }
     } else {
         $_SESSION['login_error'] = "Invalid username/email or password.";
-        header('Location: ' . $admin_base_url . 'index.php?admin_page=login');
+        header('Location: ' . $admin_base_url . 'pages/login.php'); // Direct to login file
         exit;
     }
     $stmt->close();
 } else {
-    header('Location: ' . $admin_base_url . 'index.php?admin_page=login');
+    header('Location: ' . $admin_base_url . 'pages/login.php'); // Direct to login file
     exit;
 }
 
