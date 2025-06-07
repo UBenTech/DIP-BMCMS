@@ -1,7 +1,7 @@
 <?php
 // admin/pages/login.php
 session_start(); 
-require_once __DIR__ . '/../../includes/config.php'; // NEW: Include global config
+require_once __DIR__ . '/../../includes/config.php'; // Path to global config
 require_once __DIR__ . '/../../includes/functions.php'; // For esc_html
 
 $admin_base_url = BASE_URL . 'admin/'; // Re-derive admin_base_url
@@ -21,7 +21,7 @@ $redirect_url = isset($_GET['redirect']) && (strpos($_GET['redirect'], BASE_URL)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | <?php echo SITE_NAME; ?></title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography,forms"></script>
     <script>
         tailwind.config = { /* Minimal config for login page */
             theme: { extend: { colors: { 'admin-primary': '#4338ca', 'admin-secondary': '#059669' } } }

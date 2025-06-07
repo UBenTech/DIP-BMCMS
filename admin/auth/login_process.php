@@ -4,7 +4,7 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once __DIR__ . '/../../includes/config.php'; // NEW: Include global config
+require_once __DIR__ . '/../../includes/config.php'; // Path to global config
 require_once __DIR__ . '/../../includes/db.php'; 
 require_once __DIR__ . '/../../includes/hash.php'; 
 require_once __DIR__ . '/../../includes/functions.php'; 
@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $redirect_url_from_form = isset($_POST['redirect_url']) ? $_POST['redirect_url'] : '';
     $default_redirect = $admin_base_url . 'pages/dashboard.php'; // Redirect to dashboard file
     
-    // Basic validation for the redirect URL to prevent open redirect vulnerabilities
     if (!empty($redirect_url_from_form) && (strpos($redirect_url_from_form, BASE_URL) === 0 || substr($redirect_url_from_form, 0, 1) === '/')) {
         $redirect_url = $redirect_url_from_form;
     } else {
@@ -33,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $login_field = filter_var($username_or_email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
+    global $conn; // Ensure $conn is accessible
     $sql = "SELECT id, username, password_hash, full_name, role FROM admin_users WHERE $login_field = ? LIMIT 1";
     $stmt = $conn->prepare($sql);
     
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
-        if (verify_password($password, $user['password_hash'])) {
+        if (function_exists('verify_password') && verify_password($password, $user['password_hash'])) { // Check if verify_password exists
             $_SESSION['admin_user_id'] = $user['id'];
             $_SESSION['admin_username'] = $user['username'];
             $_SESSION['admin_full_name'] = $user['full_name'];

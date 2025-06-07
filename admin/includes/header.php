@@ -1,6 +1,6 @@
 <?php
-// DIP-BMCMS/admin/includes/header.php
-require_once __DIR__ . '/../../includes/config.php'; // Path to root includes/config.php
+// admin/includes/header.php
+require_once __DIR__ . '/../../includes/config.php'; // Path to global config
 
 // Assuming content below uses SITE_NAME, BASE_URL etc.
 // Example:

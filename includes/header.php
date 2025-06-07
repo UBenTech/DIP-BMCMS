@@ -7,13 +7,6 @@ $page_title       = $page_title ?? SITE_NAME;
 $meta_description = $meta_description ?? 'Welcome to ' . SITE_NAME;
 $meta_keywords    = $meta_keywords ?? '';
 
-// Removed redundant definitions for BASE_URL and SITE_NAME, now handled by config.php
-// defined('BASE_URL') or define('BASE_URL', '/');
-// if (!defined('SITE_NAME')) {
-//     $site_settings_for_header_name = load_site_settings();
-//     define('SITE_NAME', $site_settings_for_header_name['site_name'] ?? 'dipug.com');
-// }
-
 global $page;
 $current_public_page = $page ?? ($_GET['page'] ?? 'home');
 

@@ -83,7 +83,7 @@ function slugify(string $text, string $divider = '-'): string {
 
     if (empty($text)) {
         // Fallback to random string
-        return 'n-a-' . substr(md5(time() . random_bytes(4)), 0, 6);
+        return 'n-a-' . substr(md2(time() . random_bytes(4)), 0, 6);
     }
 
     return $text;

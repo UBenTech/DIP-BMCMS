@@ -1,10 +1,10 @@
 <?php
 // admin/auth/logout.php
-if (session_status() == PHP_SESSION_SESSION_NONE) {
+if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-require_once __DIR__ . '/../../includes/config.php'; // NEW: Include global config
+require_once __DIR__ . '/../../includes/config.php'; // Path to global config
 
 // Unset all session variables
 $_SESSION = array();

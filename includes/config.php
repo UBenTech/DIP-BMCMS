@@ -1,35 +1,25 @@
 <?php
-// DIP-BMCMS/includes/config.php
+// includes/config.php
 
-// Define BASE_URL dynamically
+// Define BASE_URL dynamically for public_html as the document root
 if (!defined('BASE_URL')) {
     $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
     $host = $_SERVER['HTTP_HOST'];
-    $script_name = $_SERVER['SCRIPT_NAME'];
-    $script_dir = dirname($script_name);
-    
-    // Calculate base path. This assumes the application root is the parent of 'includes'.
-    $base_path = dirname($script_dir); 
-    
-    // Ensure base path ends with a slash if it's not the web root
-    if ($base_path !== '/' && $base_path !== '\\') {
-        $base_path .= '/';
-    } else {
-        $base_path = '/'; // Ensure it's just '/' for web root
-    }
+    $base_path = '/'; // Root of the domain
     
     define('BASE_URL', $protocol . "://" . $host . $base_path);
 }
 
 // Load site settings from JSON
+// This path is relative to includes/config.php -> public_html/config/site_settings.json
 $settings_file_path = __DIR__ . '/../config/site_settings.json';
 $site_settings = [];
 if (file_exists($settings_file_path)) {
     $json_data = file_get_contents($settings_file_path);
     if ($json_data !== false) {
-        $site_settings = json_decode($json_data, true);
-        if (json_last_error() !== JSON_ERROR_NONE || !is_array($site_settings)) {
-            $site_settings = []; // Reset if JSON is invalid
+        $loaded_settings = json_decode($json_data, true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($loaded_settings)) {
+            $site_settings = $loaded_settings;
         }
     }
 }
