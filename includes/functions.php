@@ -300,3 +300,17 @@ function get_post_by_slug($slug) {
     $result = $stmt->get_result();
     return $result->fetch_assoc();
 }
+
+
+function get_post_by_slug($slug) {
+    $conn = db_connect();
+    $stmt = $conn->prepare("SELECT * FROM posts WHERE slug = ? AND status = 'published' LIMIT 1");
+    $stmt->bind_param("s", $slug);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    return $result->fetch_assoc();
+}
+
+function esc_html($text) {
+    return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+}
