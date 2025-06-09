@@ -83,7 +83,7 @@ function slugify(string $text, string $divider = '-'): string {
 
     if (empty($text)) {
         // Fallback to random string
-        return 'n-a-' . substr(md2(time() . random_bytes(4)), 0, 6);
+        return 'n-a-' . substr(md5(time() . random_bytes(4)), 0, 6);
     }
 
     return $text;
@@ -163,8 +163,7 @@ function validate_csrf_token(string $token): bool {
         && (time() - $_SESSION['csrf_token_time'] <= 1800)
         && hash_equals($_SESSION['csrf_token'], $token)
     ) {
-        // Optionally consume the token after one use:
-        // unset($_SESSION['csrf_token'], $_SESSION['csrf_token_time']);
+        unset($_SESSION['csrf_token'], $_SESSION['csrf_token_time']);
         return true;
     }
 
@@ -291,17 +290,4 @@ function validate_preview_token(int $post_id, string $token): bool {
     }
 
     return false;
-}
-
-function get_post_by_slug($slug) {
-    global $conn; // Assuming $conn is available globally or passed
-    $stmt = $conn->prepare("SELECT * FROM posts WHERE slug = ? AND status = 'published' LIMIT 1");
-    if (!$stmt) {
-        error_log("get_post_by_slug DB prepare error: " . $conn->error);
-        return null;
-    }
-    $stmt->bind_param("s", $slug);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result->fetch_assoc();
 }

@@ -1,18 +1,15 @@
 <?php
 // admin/pages/login.php
-session_start(); 
-require_once __DIR__ . '/../../includes/config.php'; // Path to global config
-require_once __DIR__ . '/../../includes/functions.php'; // For esc_html
-
-$admin_base_url = BASE_URL . 'admin/'; // Re-derive admin_base_url
+// This page will have its own full HTML structure, not using admin header/footer.
+defined('BASE_URL') or define('BASE_URL', '/');
+$admin_base_url = BASE_URL . 'admin/';
 
 $error_message = '';
 if (isset($_SESSION['login_error'])) {
     $error_message = $_SESSION['login_error'];
-    unset($_SESSION['login_error']);
+    unset($_SESSION['login_error']); // Clear error after displaying
 }
-// Ensure redirect_url is also based on BASE_URL for safety
-$redirect_url = isset($_GET['redirect']) && (strpos($_GET['redirect'], BASE_URL) === 0 || substr($_GET['redirect'], 0, 1) === '/') ? $_GET['redirect'] : (BASE_URL . 'admin/pages/dashboard.php');
+$redirect_url = isset($_GET['redirect']) ? $_GET['redirect'] : ($admin_base_url . 'index.php?admin_page=dashboard');
 
 ?>
 <!DOCTYPE html>
@@ -21,7 +18,7 @@ $redirect_url = isset($_GET['redirect']) && (strpos($_GET['redirect'], BASE_URL)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | <?php echo SITE_NAME; ?></title>
-    <script src="https://cdn.tailwindcss.com?plugins=typography,forms"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = { /* Minimal config for login page */
             theme: { extend: { colors: { 'admin-primary': '#4338ca', 'admin-secondary': '#059669' } } }
@@ -46,7 +43,7 @@ $redirect_url = isset($_GET['redirect']) && (strpos($_GET['redirect'], BASE_URL)
             </div>
         <?php endif; ?>
 
-        <form action="<?php echo $admin_base_url; ?>auth/login_process.php" method="POST" class="space-y-6">
+        <form action="<?php echo $admin_base_url; ?>index.php?admin_page=login_process" method="POST" class="space-y-6">
             <input type="hidden" name="redirect_url" value="<?php echo esc_html($redirect_url); ?>">
             <div>
                 <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username or Email</label>

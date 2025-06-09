@@ -1,6 +1,5 @@
 <?php
 // includes/footer.php
-require_once __DIR__ . '/config.php'; // Ensure config is loaded first
 ?>
     </div>
     <footer class="bg-base-200 border-t border-neutral-light mt-auto py-12 md:py-16 text-neutral-content/70 print:hidden">
@@ -17,9 +16,6 @@ require_once __DIR__ . '/config.php'; // Ensure config is loaded first
                         <a href="#" aria-label="Twitter" class="text-neutral-content/50 hover:text-secondary transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
                         <a href="#" aria-label="LinkedIn" class="text-neutral-content/50 hover:text-secondary transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
                         <a href="#" aria-label="Instagram" class="text-neutral-content/50 hover:text-secondary transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
-                        <?php if (!isset($_SESSION['admin_user_id'])): ?>
-                          <a href="<?= BASE_URL; ?>admin/" class="ml-3 px-2 py-0.5 text-xs font-medium bg-secondary hover:bg-secondary-hover text-white rounded transition-colors">Admin Login</a>
-                        <?php endif; ?>
                     </div>
                 </div>
                 <div>
