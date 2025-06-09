@@ -14,7 +14,7 @@ include 'includes/header.php'; // Updated path for consistency
 if ($page === '') {
     echo "<h1>Welcome to " . esc_html(SITE_NAME) . "</h1>";
     echo "<p>" . esc_html(SITE_TAGLINE) . "</p>";
-    // List recent posts
+    // List recent posts.
     // Assuming get_recent_posts() function is defined and compatible with db.php connection
     // $posts = get_recent_posts();
     // foreach($posts as $p) {
